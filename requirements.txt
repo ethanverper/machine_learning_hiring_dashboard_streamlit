@@ -4,4 +4,5 @@ matplotlib
 seaborn
 pandas
 numpy
+scipy==1.9.3
 scikit-plot
