@@ -69,7 +69,8 @@ import openai
 import streamlit as st
 import seaborn as sns
 
-openai.api_key = st.secrets["openai"]["api_key"]
+openai.api_key = openai.OpenAI(api_key=st.secrets["openai"]["api_key"])
+
 
 def ai_insight_block(context: str, label_prefix="🧠"):
     with st.expander(f"{label_prefix} Ask the AI Assistant for Insights"):
