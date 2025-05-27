@@ -71,7 +71,9 @@ import seaborn as sns
 
 import openai
 
-openai.api_key = st.secrets["openai"]["api_key"]
+from openai import OpenAI
+
+client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 
 def ai_insight_block(context: str, label_prefix="🧠"):
     with st.expander(f"{label_prefix} Ask the AI Assistant for Insights"):
@@ -91,7 +93,7 @@ They asked:
 Provide an accurate, concise, and professional explanation.
 """
 
-                    response = openai.ChatCompletion.create(
+                    response = client.chat.completions.create(
                         model="gpt-3.5-turbo",
                         messages=[
                             {"role": "system", "content": "You are a helpful assistant providing insights into ML model outputs."},
@@ -99,11 +101,12 @@ Provide an accurate, concise, and professional explanation.
                         ]
                     )
 
-                    answer = response.choices[0].message["content"]
+                    answer = response.choices[0].message.content
                     st.markdown("### 💬 Assistant Answer")
                     st.info(answer)
             else:
                 st.warning("❗ Please enter a question to get insights.")
+
                 
 @st.cache_data
 def load_recruitment_data():
