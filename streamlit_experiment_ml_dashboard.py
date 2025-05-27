@@ -65,15 +65,12 @@ with st.sidebar:
     default_index = 0,
 
   )
-import openai
 import streamlit as st
 import seaborn as sns
 
 import openai
 
-from openai import OpenAI
-
-client = OpenAI(api_key=st.secrets["openai"]["api_key"])
+openai.api_key = st.secrets["openai"]["api_key"]
 
 def ai_insight_block(context: str, label_prefix="🧠"):
     with st.expander(f"{label_prefix} Ask the AI Assistant for Insights"):
@@ -93,7 +90,7 @@ They asked:
 Provide an accurate, concise, and professional explanation.
 """
 
-                    response = client.chat.completions.create(
+                    response = openai.ChatCompletion.create(
                         model="gpt-3.5-turbo",
                         messages=[
                             {"role": "system", "content": "You are a helpful assistant providing insights into ML model outputs."},
@@ -106,7 +103,6 @@ Provide an accurate, concise, and professional explanation.
                     st.info(answer)
             else:
                 st.warning("❗ Please enter a question to get insights.")
-
                 
 @st.cache_data
 def load_recruitment_data():
