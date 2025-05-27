@@ -69,12 +69,14 @@ import streamlit as st
 import seaborn as sns
 
 import openai
-client = openai.OpenAI(api_key=st.secrets["openai"]["api_key"])
+
+# Establecer la API key usando la sintaxis correcta para openai>=1.0.0
+openai.api_key = st.secrets["openai"]["api_key"]
 
 def ai_insight_block(context: str, label_prefix="🧠"):
     with st.expander(f"{label_prefix} Ask the AI Assistant for Insights"):
         user_question = st.text_area("What would you like to ask about this section?", key=f"{label_prefix}_q")
-        
+
         if st.button("🔍 Analyze with AI", key=f"{label_prefix}_btn"):
             if user_question.strip():
                 with st.spinner("Thinking..."):
@@ -89,17 +91,21 @@ They asked:
 Provide an accurate, concise, and professional explanation.
 """
 
-                    response = client.chat.completions.create(
-                        model="gpt-3.5-turbo",
-                        messages=[
-                            {"role": "system", "content": "You are a helpful assistant providing insights into ML model outputs."},
-                            {"role": "user", "content": prompt}
-                        ]
-                    )
+                    try:
+                        response = openai.chat.completions.create(
+                            model="gpt-3.5-turbo",
+                            messages=[
+                                {"role": "system", "content": "You are a helpful assistant providing insights into ML model outputs."},
+                                {"role": "user", "content": prompt}
+                            ]
+                        )
+                        answer = response.choices[0].message.content.strip()
+                        st.markdown("### 💬 Assistant Answer")
+                        st.info(answer)
 
-                    answer = response.choices[0].message.content
-                    st.markdown("### 💬 Assistant Answer")
-                    st.info(answer)
+                    except Exception as e:
+                        st.error(f"❌ Error generating response: {str(e)}")
+
             else:
                 st.warning("❗ Please enter a question to get insights.")
                 
