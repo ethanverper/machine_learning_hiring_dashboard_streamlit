@@ -1022,13 +1022,12 @@ elif selected == "Data Science Model":
 
         st.markdown("## 📊 Model Results Overview")
 
-        tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
+        tab1, tab2, tab3, tab4, tab5, tab7, tab8, tab9, tab10 = st.tabs([
             "📋 Classification Report",
             "📈 ROC Curve",
             "🧠 Feature Importances",
             "❌ Error Analysis",
             "🔄 Cross-Validation",
-            "📜 Decision Tree View",
             "📦 Probability Distribution",
             "⚖️ Bias vs Variance",
             "🧠 Assumptions & Limitations",
@@ -1161,13 +1160,6 @@ elif selected == "Data Science Model":
                 st.warning("⚠️ High variability across folds.")
             else:
                 st.success("✅ Consistent performance across folds.")
-
-        with tab6:
-            st.markdown("### 🌳 Decision Tree Structure")
-            from sklearn.tree import plot_tree
-            fig_tree, ax_tree = plt.subplots(figsize=(12, 6))
-            plot_tree(model, filled=True, feature_names=X_train.columns, class_names=["Not Hired", "Hired"], fontsize=6, ax=ax_tree)
-            st.pyplot(fig_tree, use_container_width=True)
 
         with tab7:
             st.markdown("### 📦 Probability Distribution of Predictions")
